@@ -9,11 +9,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +72,7 @@ public class WebSocketService {
 
       Process process = processBuilder.start();
       BufferedReader reader = new BufferedReader(
-        new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8)
+        new InputStreamReader(process.getInputStream(), Charset.forName("IBM850"))
       );
 
       String line;
@@ -83,13 +81,6 @@ public class WebSocketService {
       }
 
       process.waitFor();
-
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter("./result.txt"))) {
-        writer.write(output.toString());
-      } catch (IOException e) {
-        session.sendMessage(new TextMessage("Error: " + e.getMessage()));
-        return;
-      }
 
       session.sendMessage(new TextMessage(output.toString()));
       logger.info(output.toString());
