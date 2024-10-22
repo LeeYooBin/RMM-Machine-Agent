@@ -15,13 +15,16 @@ import java.nio.charset.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WebSocketService {
 
   private static final Logger logger = LoggerFactory.getLogger(WebSocketService.class);
-  private static final String WEBSOCKET_URL = "ws://localhost:8080//websocket-service";
+  
+  @Value("${websocket.url}")
+  private String WEBSOCKET_URL;
 
   public void connect() {
     WebSocketClient client = new StandardWebSocketClient();
